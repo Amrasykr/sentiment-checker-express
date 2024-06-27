@@ -1,0 +1,8 @@
+### input check with 3 words
+POST https://sentiment-checker-theta.vercel.app/api/check
+Content-Type: application/json 
+
+{
+    "words" : "ngewe kehed belegug idiot kamu dasar!"
+}
+
