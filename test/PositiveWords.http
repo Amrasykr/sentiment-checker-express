@@ -1,0 +1,7 @@
+### input check with 3 words
+POST http://localhost:3000/api/check
+Content-Type: application/json 
+
+{
+    "words" : "Halo Nama Saya Ujang mamat"
+}
