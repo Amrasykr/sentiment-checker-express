@@ -16,8 +16,7 @@ app.use(
 );
 
 app.use(bodyParser.json());
-app.use("/api", router);
-
+app.use(router);
 
 const startServer = async () => {
   try {
