@@ -6,7 +6,8 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
   res.send("Hello, this is the checker route");
-});
+}); 
+
 
 router.post("/check", rulesValidator, check);
 
