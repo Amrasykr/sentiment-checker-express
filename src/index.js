@@ -24,8 +24,9 @@ const startServer = async () => {
   try {
     await db.authenticate();
     console.log("Database connected...");
-    app.listen(process.env.APP_PORT, () => {
-      console.log(`Server berjalan di port ${process.env.APP_PORT}`);
+    const port = process.env.APP_PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server berjalan di port ${port}`);
     });
   } catch (error) {
     console.error("Unable to connect to the database:", error);
