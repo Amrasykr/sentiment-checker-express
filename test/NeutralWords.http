@@ -3,6 +3,6 @@ POST http://localhost:3000/api/check
 Content-Type: application/json 
 
 {
-    "words" : "kontol lu lucu sekali dul"
+    "words" : "kontol memek anjing tes lu kontol banget tes kamu cantik sekali test kontol kamu lucu"
 }
 

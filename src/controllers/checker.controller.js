@@ -1,4 +1,3 @@
-import BadWord from "../models/BadWord.js";
 import { checkBadWord } from "../services/CheckBadWord.js";
 import { checkBeforeSupportWord } from "../services/CheckBeforeSupportWord.js";
 import { checkAfterSupportWord } from "../services/CheckAfterSupportWord.js";
@@ -20,76 +19,77 @@ export const check = async (req, res) => {
     // Filter out null values
     const foundBadWords = badWordsFound.filter((word) => word !== null);
 
-    let value = "positive"; // Default value
+    const sentimentScores = {
+      "very negative": 3,
+      negative: 2,
+      neutral: 1,
+      positive: 0,
+    };
 
     if (foundBadWords.length > 0) {
-      // Variable untuk menentukan apakah ditemukan kata kasar yang very negative
-      let foundVeryNegative = false;
-
-      // Loop melalui kata kasar yang ditemukan untuk memeriksa kata sebelumnya dan setelahnya
       const issues = [];
+      let totalScore = 0;
+
       for (let i = 0; i < foundBadWords.length; i++) {
         const badWord = foundBadWords[i];
-        const badWordIndex = wordList.indexOf(badWord);
+        const badWordIndex = wordList.indexOf(badWord, i); // Menggunakan indexOf dengan posisi saat ini
 
         // Cek kata sebelumnya
         let previousWord = null;
-        let isPreviousWordIsBad = null;
-        let isPreviousWordIsSupport = null;
+        let isPreviousWordBad = null;
+        let isPreviousWordSupportive = null;
         if (badWordIndex > 0) {
           previousWord = wordList[badWordIndex - 1];
-          isPreviousWordIsSupport = await checkBeforeSupportWord(previousWord);
-          isPreviousWordIsBad = await checkBadWord(previousWord);
+          isPreviousWordSupportive = await checkBeforeSupportWord(previousWord);
+          isPreviousWordBad = await checkBadWord(previousWord);
         }
 
         // Cek kata setelahnya
         let nextWord = null;
-        let isNextWordIsBad = null;
-        let isNextWordIsSupport = null;
+        let isNextWordBad = null;
+        let isNextWordSupportive = null;
         if (badWordIndex < wordList.length - 1) {
           nextWord = wordList[badWordIndex + 1];
-          isNextWordIsSupport = await checkAfterSupportWord(nextWord);
-          isNextWordIsBad = await checkBadWord(nextWord);
+          isNextWordSupportive = await checkAfterSupportWord(nextWord);
+          isNextWordBad = await checkBadWord(nextWord);
         }
 
-        // Tentukan nilai berdasarkan hasil pemeriksaan
-        if (
-          (badWordIndex === 0 || badWordIndex === wordList.length - 1) &&
-          (isPreviousWordIsBad || isNextWordIsBad)
-        ) {
-          foundVeryNegative = true;
-        } else if (isPreviousWordIsBad && isNextWordIsBad) {
-          foundVeryNegative = true;
-        } else if (
-          (isPreviousWordIsSupport || isNextWordIsSupport) &&
-          !(isPreviousWordIsBad && isNextWordIsBad)
-        ) {
-          value = "negative";
-        } else {
-          // Jika tidak ditemukan kata kasar yang very negative, nilai tetap positif atau netral
-          value = "neutral";
+        let issueSentiment = "neutral";
+        if (isPreviousWordBad || isNextWordBad) {
+          issueSentiment = "very negative";
+        } else if (isPreviousWordSupportive || isNextWordSupportive) {
+          issueSentiment = "negative";
         }
 
         // Tambahkan informasi kata kasar dan kata pendukung sebelum dan sesudahnya ke dalam array issues
         issues.push({
           badWord: badWord,
           previousWord: previousWord,
-          isPreviousWordIsBad: isPreviousWordIsBad,
-          isPreviousWordIsSupport: isPreviousWordIsSupport,
+          isPreviousWordBad: isPreviousWordBad,
+          isPreviousWordSupportive: isPreviousWordSupportive,
           nextWord: nextWord,
-          isNextWordIsBad: isNextWordIsBad,
-          isNextWordIsSupport: isNextWordIsSupport,
+          isNextWordBad: isNextWordBad,
+          isNextWordSupportive: isNextWordSupportive,
+          issueSentiment: issueSentiment,
         });
+
+        // Tambahkan nilai prioritas ke totalScore
+        totalScore += sentimentScores[issueSentiment];
       }
 
-      // Setelah loop, jika ditemukan kata kasar yang very negative, atur nilai value menjadi "very negative"
-      if (foundVeryNegative) {
-        value = "very negative";
+      // Tentukan nilai akhir berdasarkan totalScore
+      let finalSentiment = "positive";
+      if (totalScore >= 3) {
+        finalSentiment = "very negative";
+      } else if (totalScore >= 2) {
+        finalSentiment = "negative";
+      } else if (totalScore >= 1) {
+        finalSentiment = "neutral";
       }
 
       return res.status(400).json({
         message: "Contains bad words",
-        value: value,
+        value: finalSentiment,
         issues: issues,
         data: words,
       });
