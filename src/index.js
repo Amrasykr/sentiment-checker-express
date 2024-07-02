@@ -16,7 +16,9 @@ app.use(
 );
 
 app.use(bodyParser.json());
-app.use(router);
+app.use("/api", router);
+
+app.get("/", (req, res) => res.send("Express on Vercel"));
 
 const startServer = async () => {
   try {
@@ -31,3 +33,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+export default app;

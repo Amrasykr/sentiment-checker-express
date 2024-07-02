@@ -1,8 +1,8 @@
 ### input check with 3 words
-POST http://localhost:3000/api/check
+POST http://localhost:3000/check
 Content-Type: application/json 
 
 {
-    "words" : "ngewe kehed belegug idiot kamu dasar!"
+    "words" : "kontol memek anjing bangsad ngentot"
 }
 
