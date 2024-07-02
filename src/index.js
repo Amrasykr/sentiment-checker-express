@@ -23,7 +23,7 @@ app.get("/", (req, res) => res.send("Express on Vercel"));
 // Middleware untuk menangani error
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  res.status(500).send("Something broke!");
 });
 
 const startServer = async () => {
@@ -37,7 +37,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error("Unable to connect to the database:", error);
-    process.exit(1); 
+    process.exit(1);
   }
 };
 
