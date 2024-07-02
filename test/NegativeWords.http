@@ -1,7 +1,7 @@
 ### input check with 3 words
-POST http://localhost:3000/api/check
+POST https://sentiment-checker-backend.vercel.app/api/check
 Content-Type: application/json 
 
 {
-    "words" : ""
+    "words" : "aduh anying apaan ini teh yaa"
 }

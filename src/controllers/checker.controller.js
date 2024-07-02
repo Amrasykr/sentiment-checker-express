@@ -95,7 +95,6 @@ export const check = async (req, res) => {
       });
     }
 
-    
     // Jika tidak ada kata kasar yang ditemukan, kembalikan nilai "positive"
     res.status(200).json({
       message: "Sentence contains no bad words",
