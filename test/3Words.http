@@ -1,5 +1,5 @@
 ### input check with 3 words
-POST https://sentiment-checker-backend.vercel.app/api/check
+POST http://localhost:3000/api/check
 Content-Type: application/json 
 
 {
