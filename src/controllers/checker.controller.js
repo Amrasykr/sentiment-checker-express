@@ -5,18 +5,12 @@ import { checkAfterSupportWord } from "../services/CheckAfterSupportWord.js";
 export const check = async (req, res) => {
   try {
     const words = req.body.words;
-
-    // Memisahkan kata-kata yang diberikan oleh pengguna
     const wordList = words.split(" ");
 
-    // Loop melalui kata-kata dan cek apakah ada yang termasuk kata kasar
     const badWordsFound = await Promise.all(
-      wordList.map(async (word) => {
-        return await checkBadWord(word);
-      })
+      wordList.map(async (word) => await checkBadWord(word))
     );
 
-    // Filter out null values
     const foundBadWords = badWordsFound.filter((word) => word !== null);
 
     const sentimentScores = {
@@ -61,7 +55,6 @@ export const check = async (req, res) => {
           issueSentiment = "negative";
         }
 
-        // Tambahkan informasi kata kasar dan kata pendukung sebelum dan sesudahnya ke dalam array issues
         issues.push({
           badWord: badWord,
           previousWord: previousWord,
@@ -73,11 +66,9 @@ export const check = async (req, res) => {
           issueSentiment: issueSentiment,
         });
 
-        // Tambahkan nilai prioritas ke totalScore
         totalScore += sentimentScores[issueSentiment];
       }
 
-      // Tentukan nilai akhir berdasarkan totalScore
       let finalSentiment = "positive";
       if (totalScore >= 3) {
         finalSentiment = "very negative";
@@ -95,7 +86,6 @@ export const check = async (req, res) => {
       });
     }
 
-    // Jika tidak ada kata kasar yang ditemukan, kembalikan nilai "positive"
     res.status(200).json({
       message: "Sentence contains no bad words",
       value: "positive",
