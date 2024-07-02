@@ -18,7 +18,7 @@ app.use(
 app.use(bodyParser.json());
 app.use("/api", router);
 
-app.get("/", (req, res) => res.send("Express on Vercel"));
+app.get("/", (req, res) => res.json("Express on Vercel"));
 
 // Middleware untuk menangani error
 app.use((err, req, res, next) => {
