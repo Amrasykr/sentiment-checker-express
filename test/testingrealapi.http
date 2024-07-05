@@ -3,5 +3,5 @@ POST https://sentiment-checker-backend.vercel.app/api/check
 Content-Type: application/json 
 
 {
-    "words" : "ngewe kehed belegug idiot kamu dasar!"
+    "words" : "halo nama saya ammar asysyakur"
 }

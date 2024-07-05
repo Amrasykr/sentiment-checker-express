@@ -11,7 +11,7 @@ const BadWord = db.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    bad: {
+    word: {
       type: DataTypes.STRING,
       allowNull: false,
     },

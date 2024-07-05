@@ -3,5 +3,5 @@ POST http://localhost:3000/api/check
 Content-Type: application/json 
 
 {
-    "words" : "wah lu anjing banget dah dan lu memek babi"
+    "words" : "wah lu anjing banget dah lu pea !"
 }

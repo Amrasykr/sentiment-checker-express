@@ -9,8 +9,8 @@ export const checkAfterSupportWord = async (word) => {
     });
     const supportWordList = supportWords.map((sw) => sw.word);
 
-    const badWords = await BadWord.findAll({ attributes: ["bad"] });
-    const badWordList = badWords.map((bw) => bw.bad);
+    const badWords = await BadWord.findAll({ attributes: ["word"] });
+    const badWordList = badWords.map((bw) => bw.word);
 
     return supportWordList.includes(word) && !badWordList.includes(word)
       ? word
